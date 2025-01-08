@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
+import { CiUser } from "react-icons/ci";
+import { RiArrowDropDownLine } from "react-icons/ri";
 
 import {
     Popover,
@@ -10,13 +12,17 @@ import {
 
 function PlaceInp() {
     const [childrenCount, setChildrenCount] = useState(0);
-    const [adultCount, setAdultCount] = useState(0)
- 
+    const [adultCount, setAdultCount] = useState(1)
+
     return (
         <div>
             <Popover>
                 <PopoverTrigger asChild>
-                    <Button className=" w-[15vw] py-6" variant="outline">Open popover</Button>
+                    <Button className=" w-[20vw] py-6" variant="outline">
+                        <CiUser className=" w-12" />
+                         <span>{adultCount} adults - {childrenCount} children</span>
+                         <RiArrowDropDownLine />
+                    </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-80">
                     <div className="grid gap-4">
@@ -33,7 +39,7 @@ function PlaceInp() {
                                     <button
                                         className="border border-gray-400 text-gray-400 px-[10px] text-xl rounded-3xl"
                                         onClick={() => setAdultCount(adultCount - 1)}
-                                        // disabled={count === 0}
+                                    // disabled={count === 0}
                                     >
                                         -
                                     </button>
@@ -84,7 +90,7 @@ function PlaceInp() {
                                 <div className="flex items-center space-x-4">
                                     <div className="flex items-center space-x-2">
                                         <Switch id="airplane-mode" />
-                                        
+
                                     </div>
                                 </div>
 
