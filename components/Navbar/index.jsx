@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Gutter from "../Gutter";
 
 export default function Navbar() {
@@ -10,9 +11,9 @@ export default function Navbar() {
                         <button className=" text-gray-600 px-8 py-2 rounded-3xl hover:bg-gray-200">
                             Register Hotel
                         </button>
-                        <button className="bg-red-500 text-white px-8 py-2 rounded-3xl hover:bg-red-800">
+                        <Link href={'/auth'} className="bg-red-500 text-white px-8 py-2 rounded-3xl hover:bg-red-800">
                             Sign In
-                        </button>
+                        </Link>
                         <button className=" text-gray-600 px-8 py-2 rounded-3xl border border-gray-600 hover:bg-gray-200">
                             Sign Up
                         </button>
