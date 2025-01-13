@@ -1,43 +1,63 @@
-import React from 'react';
-import { FcGoogle } from "react-icons/fc";
+"use client";
+
+import { useAuth } from "@/app/hooks/auth/useAuth";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import LogInForm from "./components/LogInForm";
+import SignUpForm from "./components/SignUpForm";
 
 const Auth = () => {
+    const searchParams = useSearchParams()
+    const router = useRouter()
+    const [currentTab, setCurrentTab] = useState('login');
+
+    useEffect(() => {
+        const tab = searchParams.get('tab')
+        if (tab === 'signup' || tab === 'login') {
+            setCurrentTab(tab)
+        }
+    }, [searchParams])
+
+    const handleTabChange = (tab) => {
+        setCurrentTab(tab)
+        router.push(`/auth?tab=${tab}`)
+    }
+
     return (
-        <main className='flex justify-center items-center h-[70vh]'>
-            <form className='flex flex-col max-w-2xl w-full rounded-lg shadow-xl border-t'>
-
-                <div className='border-b border-gray-300 py-4'>
-                    <h1 className=' text-center text-2xl text-gray-800'>LogIn or SignUp</h1>
-                </div>
-                <div className=' space-y-5 p-8'>
-                    <h2 className=' text-gray-800 text-3xl'>Welcome to our platform</h2>
-
-                    <input
-                        className=' w-full p-4 border-2 rounded-xl'
-                        type="email"
-                        placeholder='Enter your email' />
-                    <input
-                        className=' w-full p-4 border-2 rounded-xl'
-                        placeholder='Enter your password'
-                        type="password" />
-
-                    <button className=' w-full p-4 bg-red-500 text-white font-bold text-lg hover:bg-red-700 rounded-xl'>Continue</button>
-
-                    <div class="flex items-center my-4">
-                        <div class="flex-grow border-t border-gray-300"></div>
-                        <span class="px-4 text-gray-500 text-sm">OR</span>
-                        <div class="flex-grow border-t border-gray-300"></div>
-                    </div>
-
-
-                    <button className='w-full flex items-center text-center border-2 border-black p-4 font-bold text-lg rounded-xl hover:bg-gray-200'>
-                        <FcGoogle />
-                        <span className='mx-auto'>With Google</span>
+        <main className="flex justify-center items-center h-auto py-14">
+            <div className="flex flex-col items-center w-1/3 rounded-md shadow-lg border">
+                {/* Tabs */}
+                <div className="flex w-full">
+                    <button
+                        className={`w-1/2 py-2 text-lg font-bold ${currentTab === 'login'
+                                ? "bg-red-500 text-white border-b-2 border-red-700"
+                                : "bg-gray-100 text-gray-700"
+                            } rounded-t-md`}
+                        onClick={() => handleTabChange('login')}
+                    >
+                        Sign In
+                    </button>
+                    <button
+                        className={`w-1/2 py-2 text-lg font-bold ${currentTab === 'signup'
+                                ? "bg-red-500 text-white border-b-2 border-red-700"
+                                : "bg-gray-100 text-gray-700"
+                            } rounded-t-md`}
+                        onClick={() => handleTabChange('signup')}
+                    >
+                        Sign Up
                     </button>
                 </div>
-            </form>
+
+                {/* Form */}
+                <div className="w-full p-6">
+                    {currentTab === 'login' && <LogInForm />}
+                    {currentTab === 'signup' && <SignUpForm />}
+                </div>
+            </div>
         </main>
     );
 };
+
+
 
 export default Auth;

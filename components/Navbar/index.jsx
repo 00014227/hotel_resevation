@@ -11,12 +11,12 @@ export default function Navbar() {
                         <button className=" text-gray-600 px-8 py-2 rounded-3xl hover:bg-gray-200">
                             Register Hotel
                         </button>
-                        <Link href={'/auth'} className="bg-red-500 text-white px-8 py-2 rounded-3xl hover:bg-red-800">
+                        <Link href={'/auth?tab=login'} className="bg-red-500 text-white px-8 py-2 rounded-3xl hover:bg-red-800">
                             Sign In
                         </Link>
-                        <button className=" text-gray-600 px-8 py-2 rounded-3xl border border-gray-600 hover:bg-gray-200">
+                        <Link href={'/auth?tab=signup'} className=" text-gray-600 px-8 py-2 rounded-3xl border border-gray-600 hover:bg-gray-200">
                             Sign Up
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </Gutter>
