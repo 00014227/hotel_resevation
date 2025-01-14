@@ -45,14 +45,7 @@ const LogInForm = () => {
                     {loading ? 'Processing...' : 'Log In'}
                 </button>
 
-                {/* <button
-                className="w-full p-4 bg-blue-500 text-white font-bold text-lg hover:bg-blue-700 rounded-xl"
-                onClick={() => signUp(email, password)}
-                disabled={loading}
-            >
-                {loading ? 'Processing...' : 'Sign Up'}
-            </button> */}
-
+      
                 <div className="flex items-center my-4">
                     <div className="flex-grow border-t border-gray-300"></div>
                     <span className="px-4 text-gray-500 text-sm">OR</span>

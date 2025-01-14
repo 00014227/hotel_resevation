@@ -1,4 +1,5 @@
 import { supabase } from '@/app/lib/supabaseClient';
+import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { setLoading, setUser, setError, clearAuthState } from '../../lib/features/auth/auth.slice';
@@ -6,11 +7,11 @@ import { setLoading, setUser, setError, clearAuthState } from '../../lib/feature
 export const useAuth = () => {
     const dispatch = useDispatch();
     const { user, loading, error } = useSelector((state) => state.auth); 
-
+    const router = useRouter()
     const signIn = async (email, password) => {
 
         
-        if (!email || !error) {
+        if (!email || !password) {
             toast.error("All inputs must be field")
             return
         }
@@ -35,7 +36,7 @@ export const useAuth = () => {
             }
 
             dispatch(setUser(data.user));
-   
+            router.push('/')
 
         } catch (err) {
             dispatch(setError(err.message));
