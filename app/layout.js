@@ -5,8 +5,9 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Footer from "@/components/Footer.jsx";
 import ReduxProvider from "./store.provider";
-import 'react-toastify/dist/ReactToastify.css'; 
+import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from "react-toastify";
+import GetInitialState from "./GetInitialState";
 
 
 const geistSans = localFont({
@@ -29,10 +30,12 @@ export default function RootLayout({ children }) {
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <Navbar />
-          {children}
-          <ToastContainer/>
-          <Footer />
+          <GetInitialState>
+            <Navbar />
+            {children}
+            <ToastContainer />
+            <Footer />
+          </GetInitialState>
         </body>
       </ReduxProvider>
     </html>

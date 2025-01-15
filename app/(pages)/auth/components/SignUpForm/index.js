@@ -1,17 +1,29 @@
 import { useAuth } from '@/app/hooks/auth/useAuth';
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { FcGoogle } from 'react-icons/fc';
+import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import useUpdateUserTable from '@/app/hooks/auth/useUpdateUserTable/useUpdateUserTable';
 
 
 function SignUpForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [active, setActive] = useState(false)
     const { signUp, signInWithGoogle, loading, error } = useAuth();
+    const { userTable, user } = useSelector((store) => store.auth)
+    const router = useRouter()
+    const {
+        isLoading: tableIsLoading,
+        updateUserTable,
+        error: tableError,
+      } = useUpdateUserTable()
 
-    
-    const handleSubmit = () => {
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
         if (password !== confirmPassword) {
             toast.error('Passwords are not the same')
             return
@@ -23,12 +35,43 @@ function SignUpForm() {
         }
 
         if (password.length < 6) {
-            toast.error("The length of password must be 6", {theme: 'light'})
+            toast.error("The length of password must be 6", { theme: 'light' })
             return
         }
 
-        signUp(email, password)
+        setActive(true)
+        await signUp(email, password)
     }
+
+    useEffect(() => {
+        if (user?.user && active && email && !error && !loading) {
+
+            const fetch = async () => {
+                await updateUserTable({
+                    id: user.user.id,
+                    email: user.user.email
+                })
+            }
+            fetch()
+            setEmail('')
+            setPassword('')
+            setConfirmPassword('')
+
+        }
+    }, [user, active, email, loading, error])
+
+    useEffect(() => {
+        if (user && userTable && active) {
+          setTimeout(() => router.push('/'), 250)
+          setActive(false)
+        }
+      }, [active, router, user, userTable])
+
+      useEffect(() => {
+        if (error || tableError) {
+          setActive(false)
+        }
+      }, [error, tableError])
 
     return (
 
@@ -68,8 +111,8 @@ function SignUpForm() {
 
                 <button
                     className="w-full p-4 bg-blue-500 text-white font-bold text-lg hover:bg-blue-700 rounded-xl"
-                    onClick={() => signUp(email, password)}
-                    disabled={loading}
+                    onClick={handleSubmit}
+                    disabled={loading || tableIsLoading}
                 >
                     {loading ? 'Processing...' : 'Sign Up'}
                 </button>
