@@ -1,10 +1,11 @@
-import { useAuth } from '@/app/hooks/auth/useAuth';
+// import { useAuth } from '@/app/hooks/auth/useAuth';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { FcGoogle } from 'react-icons/fc';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import useUpdateUserTable from '@/app/hooks/auth/useUpdateUserTable/useUpdateUserTable';
+import useSignUp from '@/app/hooks/auth/useSignUp/useSignUp';
 
 
 function SignUpForm() {
@@ -12,7 +13,7 @@ function SignUpForm() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('')
     const [active, setActive] = useState(false)
-    const { signUp, signInWithGoogle, loading, error } = useAuth();
+    const { signUp, data, isLoading, error } = useSignUp();
     const { userTable, user } = useSelector((store) => store.auth)
     const router = useRouter()
     const {
@@ -44,7 +45,7 @@ function SignUpForm() {
     }
 
     useEffect(() => {
-        if (user?.user && active && email && !error && !loading) {
+        if (user?.user && active && email && !error && !isLoading && data) {
 
             const fetch = async () => {
                 await updateUserTable({
@@ -58,7 +59,7 @@ function SignUpForm() {
             setConfirmPassword('')
 
         }
-    }, [user, active, email, loading, error])
+    }, [user, active, email, isLoading, error, data])
 
     useEffect(() => {
         if (user && userTable && active) {
@@ -112,9 +113,9 @@ function SignUpForm() {
                 <button
                     className="w-full p-4 bg-blue-500 text-white font-bold text-lg hover:bg-blue-700 rounded-xl"
                     onClick={handleSubmit}
-                    disabled={loading || tableIsLoading}
+                    disabled={isLoading || tableIsLoading}
                 >
-                    {loading ? 'Processing...' : 'Sign Up'}
+                    {isLoading ? 'Processing...' : 'Sign Up'}
                 </button>
 
                 <div className="flex items-center my-4">
@@ -125,8 +126,8 @@ function SignUpForm() {
 
                 <button
                     className="w-full flex items-center text-center border-2 border-black p-4 font-bold text-lg rounded-xl hover:bg-gray-200"
-                    onClick={signInWithGoogle}
-                    disabled={loading}
+                    // onClick={signInWithGoogle}
+                    disabled={isLoading}
                 >
                     <FcGoogle />
                     <span className="mx-auto">With Google</span>

@@ -1,5 +1,5 @@
 import { useAuth } from '@/app/hooks/auth/useAuth';
-import useGetUserTable from '@/app/hooks/useGetUserTable/useGetUserTable';
+import useGetUserTable from '@/app/hooks/auth/useGetUserTable/useGetUserTable';
 import { setUser, setUserTabel } from '@/app/lib/features/auth/auth.slice';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
