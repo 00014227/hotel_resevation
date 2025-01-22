@@ -13,6 +13,7 @@ import {
 function PlaceInp() {
     const [childrenCount, setChildrenCount] = useState(0);
     const [adultCount, setAdultCount] = useState(1)
+    const [totalGuests, setTotalGuests] = useState(1)
 
     return (
         <div>

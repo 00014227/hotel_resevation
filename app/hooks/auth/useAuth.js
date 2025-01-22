@@ -11,7 +11,6 @@ export const useAuth = () => {
     const router = useRouter()
     
     const signIn = async ({email, password}) => {
-        console.log('fvgwegw', email, password);
         dispatch(setLoading(false))
         dispatch(setError(null))
 
@@ -95,6 +94,8 @@ export const useAuth = () => {
         try {
             await supabase.auth.signOut();
             dispatch(clearAuthState());
+            localStorage.removeItem(`user-table-${sbUrl}`)
+            localStorage.removeItem(`user-auth-${sbUrl}`)
         } catch (err) {
             dispatch(setError(err.message));
         } finally {
