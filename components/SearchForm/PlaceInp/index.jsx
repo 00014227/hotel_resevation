@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { CiUser } from "react-icons/ci";
@@ -10,10 +10,8 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 
-function PlaceInp() {
-    const [childrenCount, setChildrenCount] = useState(0);
-    const [adultCount, setAdultCount] = useState(1)
-    const [totalGuests, setTotalGuests] = useState(1)
+function PlaceInp({childrenCount, setChildrenCount, adultCount, setAdultCount, includePets, setIncludePets}) {
+
 
     return (
         <div>
@@ -90,7 +88,11 @@ function PlaceInp() {
                                 <label>Are you travel with pets?</label>
                                 <div className="flex items-center space-x-4">
                                     <div className="flex items-center space-x-2">
-                                        <Switch id="airplane-mode" />
+                                        <Switch 
+                                        id="airplane-mode"
+                                        checked = {includePets}
+                                        onCheckedChange={setIncludePets}
+                                        />
 
                                     </div>
                                 </div>
