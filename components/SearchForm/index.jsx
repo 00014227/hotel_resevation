@@ -64,27 +64,29 @@ export default function SearchForm() {
     }));
   };
 
-  const search = () => {
-    dispatch(searchHotels(searchHotel))
-  }
-
-
 
 
 
   const handleSubmit = () => {
     handleTotalGuestsChange()
+
+    const searchParams = new URLSearchParams({
+      country: searchHotel.country,
+      city: searchHotel.city,
+      checkIn: searchHotel.checkIn,
+      checkOut: searchHotel.checkOut,
+      includePets: searchHotel.includePets,
+      totalGuests: searchHotel.totalGuests,
+    });
    
-    dispatch(searchHotels(searchHotel))
-    router.push('/result')
+    // dispatch(searchHotels(searchHotel))
+    router.push(`/result?${searchParams.toString()}`)
   }
 
   console.log(searchParams, 'searchParams')
 
   console.log(searchHotel, 'hhhh')
-  // searchHotels(searchParams).then(hotels => {
-  //   console.log('Available Hotels:', hotels);
-  // });
+
 
   return (
     <div className="flex justify-center">
