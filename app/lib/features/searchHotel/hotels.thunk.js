@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { supabase } from "../../supabaseClient";
 
 export const searchHotels = createAsyncThunk(
+
     'hotels/fetchHotels',
     async ({ country, city, checkIn, checkOut, includePets, totalGuests }) => {
         try {

@@ -1,3 +1,4 @@
+import { setUser } from '@/app/lib/features/auth/auth.slice'
 import { supabase } from '@/app/lib/supabaseClient'
 import {useState} from 'react'
 import { useDispatch } from 'react-redux'

@@ -8,20 +8,31 @@ import { supabase } from "@/app/lib/supabaseClient"
 import { useDispatch } from "react-redux"
 import { searchHotels } from "@/app/lib/features/searchHotel/hotels.thunk"
 import Place from "./Place"
+import { useRouter } from "next/navigation"
 
 
 export default function SearchForm() {
   const dispatch = useDispatch()
+  const router = useRouter()
   const [childrenCount, setChildrenCount] = useState(0);
   const [adultCount, setAdultCount] = useState(1)
   const [searchHotel, setSearchHotel] = useState({
-    country: 'USA',
-    city: 'New York',
+    country: '',
+    city: '',
     checkIn: '',
     checkOut: '',
     includePets: false,
     totalGuests: 1
   })
+
+  const searchParams = {
+    country: '',
+    city: '',
+    checkIn: '2025-01-15',
+    checkOut: '2025-01-20',
+    includePets: true,
+    totalGuests: 1 // Total number of guests (adults + children)
+  };
 
   const handleLocationChange = (e) => {
     const value = e.target.value;
@@ -54,23 +65,21 @@ export default function SearchForm() {
   };
 
   const search = () => {
-    dispatch(searchHotels(searchParams))
+    dispatch(searchHotels(searchHotel))
   }
 
-  const searchParams = {
-    country: 'USA',
-    city: '',
-    checkIn: '2025-01-15',
-    checkOut: '2025-01-20',
-    includePets: true,
-    totalGuests: 0 // Total number of guests (adults + children)
-  };
+
+
+
 
   const handleSubmit = () => {
     handleTotalGuestsChange()
-    dispatch(searchHotels(searchParams))
-
+   
+    dispatch(searchHotels(searchHotel))
+    router.push('/result')
   }
+
+  console.log(searchParams, 'searchParams')
 
   console.log(searchHotel, 'hhhh')
   // searchHotels(searchParams).then(hotels => {

@@ -1,17 +1,18 @@
+import { searchHotels } from "./hotels.thunk";
 
 const hotelsExtraReducer = (builder) => {
     builder
-        .addCase(fetchHotels.pending, (state) => {
-            state.loading = true;
+        .addCase(searchHotels.pending, (state) => {
+            state.isLoading = true;
             state.error = null;
         })
-        .addCase(fetchHotels.fulfilled, (state, action) => {
+        .addCase(searchHotels.fulfilled, (state, action) => {
             state.hotels = action.payload;
-            state.loading = false;
+            state.isLoading = false;
         })
-        .addCase(fetchHotels.rejected, (state, action) => {
+        .addCase(searchHotels.rejected, (state, action) => {
             state.error = action.payload;
-            state.loading = false;
+            state.isLoading = false;
         });
 };
 
