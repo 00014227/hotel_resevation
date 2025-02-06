@@ -43,7 +43,10 @@ export default function ResultPage() {
             <div>
                 <h1>Available Hotels</h1>
                 <ul className="flex flex-col justify-center items-center">
-                    <ResultCard hotels={hotels.hotels}/>
+                    <ResultCard
+                     hotels={hotels.hotels}
+                     checkIn={searchParams.get("checkIn")}
+                     checkOut={searchParams.get("checkOut")}/>
                   
                 </ul>
             </div>

@@ -12,7 +12,6 @@ import { useRouter } from "next/navigation"
 
 
 export default function SearchForm() {
-  const dispatch = useDispatch()
   const router = useRouter()
   const [childrenCount, setChildrenCount] = useState(0);
   const [adultCount, setAdultCount] = useState(1)

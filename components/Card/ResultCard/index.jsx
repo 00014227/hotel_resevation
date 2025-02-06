@@ -2,15 +2,19 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import React from 'react';
 import { FaStar } from "react-icons/fa";
+import { useDispatch } from 'react-redux';
 
-export default function ResultCard({ hotels }) {
-    console.log('Reuslt', hotels)
+export default function ResultCard({ hotels, checkIn, checkOut }) {
+    console.log('ReusltDate', checkIn)
     return (
         <>
             {hotels?.data?.map((hotel) => (
                 <li key={hotel.id} className="border max-w-sm w-full lg:max-w-3xl rounded-xl lg:flex mb-2">
                     {/* Display Hotel Image */}
-                    <Link href={`/hotel/${hotel.id}`} passHref>
+                    <Link href={{
+                        pathname:`/hotel/${hotel.id}`,
+                        query: {checkIn, checkOut}
+                        }} passHref>
                     
                     <img
                         src={Array.isArray(hotel.image_url) ? hotel.image_url[0] : hotel.image_url}

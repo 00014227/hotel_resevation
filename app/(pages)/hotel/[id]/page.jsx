@@ -1,25 +1,23 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useSearchParams } from "next/navigation";
+import { fetchActiveHotelRooms, fetchHotelById } from "@/app/lib/features/hotelDetails/hotelDetails.thunk";
 
 export default function HotelDetail() {
-    const router = useRouter();
+    const params = useParams();
+    const id = params.id
+
+    const searchParams = useSearchParams()
+    const checkIn = searchParams.get('checkIn')
+    const checkOut = searchParams.get('checkOut')
+    const dispatch = useDispatch()
     const [hotelDetails, setHotelDetails] = useState(null);
 
     useEffect(() => {
-        if (!router.isReady) return; // Wait until router is ready
-
-        const { id } = router.query; // Get hotel ID from URL
-
-        // Get all hotels from Redux store
-        const allHotels = useSelector((state) => state.hotels?.hotels?.data || []);
-
-        // Find the selected hotel from Redux
-        const hotel = allHotels.find(h => h.id === id);
-
-        setHotelDetails(hotel || null);
-    }, [router.isReady, router.query]);
+       dispatch(fetchHotelById(id))
+       dispatch(fetchActiveHotelRooms(checkIn, checkOut, id))
+    }, []);
 
     if (!hotelDetails) {
         return <p>Loading...</p>;
