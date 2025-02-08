@@ -4,12 +4,14 @@ import { supabase } from "../../supabaseClient";
 export const fetchHotelById = createAsyncThunk(
     'hotelDetail/fetchHotelById',
 
-    async ({ id }) => {
+    async ( id ) => {
+        console.log(id, 'iddd')
         try {
             const { data, error } = await supabase
                 .from('hotels')
                 .select('*')
                 .eq('id', id)
+                console.log(data, 'rrrr')
             return { data, error }
 
         } catch (error) {
@@ -21,7 +23,9 @@ export const fetchHotelById = createAsyncThunk(
 
 export const fetchActiveHotelRooms = createAsyncThunk(
     'hotelDetail/fetchActiveHotelRooms',
-    async ({ checkIn, checkOut, hotelId }, { rejectWithValue }) => {
+    async ({ checkIn, checkOut, id }, { rejectWithValue }) => {
+        console.log(id, 'hjjjj')
+        
               // Step 1: Fetch unavailable room IDs for the given date range
               const { data: unavailableRooms, error: unavailableRoomsError } = await supabase
               .rpc('get_unavailable_rooms', { check_in: checkIn, check_out: checkOut });
@@ -38,7 +42,7 @@ export const fetchActiveHotelRooms = createAsyncThunk(
           let query = supabase
               .from('rooms')
               .select('*')
-              .eq('hotel_id', hotelId);
+              .eq('hotel_id', id);
 
           if (unavailableRoomIds.length > 0) {
               query = query.not('room_id', 'in', `(${unavailableRoomIds.join(',')})`);

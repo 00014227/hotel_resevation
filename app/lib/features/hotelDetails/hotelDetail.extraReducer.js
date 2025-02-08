@@ -19,7 +19,7 @@ const hotelDetailExtraReducer = (builder) => {
             state.error = null;
         })
         .addCase(fetchActiveHotelRooms.fulfilled, (state, action) => {
-            state.room = action.payload;
+            state.rooms = action.payload;
             state.isLoading = false;
         })
         .addCase(fetchActiveHotelRooms.rejected, (state, action) => {
