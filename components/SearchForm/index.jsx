@@ -4,9 +4,6 @@ import { useState } from "react"
 import DateRangeInp from "./DateRange"
 import PlaceInp from "./PlaceInp"
 import { Button } from "../ui/button"
-import { supabase } from "@/app/lib/supabaseClient"
-import { useDispatch } from "react-redux"
-import { searchHotels } from "@/app/lib/features/searchHotel/hotels.thunk"
 import Place from "./Place"
 import { useRouter } from "next/navigation"
 
@@ -82,13 +79,10 @@ export default function SearchForm() {
     router.push(`/result?${searchParams.toString()}`)
   }
 
-  console.log(searchParams, 'searchParams')
-
-  console.log(searchHotel, 'hhhh')
 
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center space-x-4">
       <Place onChange={handleLocationChange}/>
       <DateRangeInp
         selectedRange={{

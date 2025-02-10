@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import React from 'react';
 import { FaStar } from "react-icons/fa";
-import { useDispatch } from 'react-redux';
 
 export default function ResultCard({ hotels, checkIn, checkOut }) {
     console.log('ReusltDate', checkIn)

@@ -49,7 +49,6 @@ export const searchHotels = createAsyncThunk(
                 console.error('Error fetching hotels:', error);
                 return [];
             }
-            console.log(data, 'hotels')
             return { data, error };
         } catch (error) {
             console.log('Error with search:', error)

@@ -11,7 +11,6 @@ export const fetchHotelById = createAsyncThunk(
                 .from('hotels')
                 .select('*')
                 .eq('id', id)
-                console.log(data, 'rrrr')
             return { data, error }
 
         } catch (error) {
