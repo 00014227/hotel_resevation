@@ -1,49 +1,73 @@
 "use client";
+import { useState, useEffect } from "react";
 
-import { useState } from "react";
-
-export default function HomePage() {
+export default function HotelChat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [step, setStep] = useState("");
 
-  const sendMessage = async () => {
+  useEffect(() => {
+    // Auto-start chat when component loads
+    startChat();
+  }, []);
+
+  async function startChat() {
+    const response = await fetch("/api/hotel-chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: "", step: "" }),
+    });
+
+    const data = await response.json();
+    setMessages([{ role: "bot", text: data.reply }]);
+    setStep(data.step);
+  }
+
+  async function sendMessage() {
     if (!input.trim()) return;
 
-    const userMessage = { role: "user", content: input };
+    const userMessage = { role: "user", text: input };
     setMessages([...messages, userMessage]);
 
     const response = await fetch("/api/hotel-chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: input }),
+      body: JSON.stringify({ message: input, step }),
     });
 
     const data = await response.json();
-    const botMessage = { role: "assistant", content: data.reply };
-
-    setMessages([...messages, userMessage, botMessage]);
+    setMessages([...messages, userMessage, { role: "bot", text: data.reply }]);
+    setStep(data.step);
     setInput("");
-  };
+  }
 
   return (
-    <div className="max-w-lg mx-auto p-6">
-      <h1 className="text-xl font-bold mb-4">Чат с AI (рекомендации отелей)</h1>
-      <div className="border p-4 h-80 overflow-auto">
+    <div className="max-w-md mx-auto p-4 border rounded-lg shadow-lg">
+      <div className="h-80 overflow-y-auto p-2 border-b">
         {messages.map((msg, index) => (
-          <p key={index} className={msg.role === "user" ? "text-blue-500" : "text-green-500"}>
-            {msg.content}
-          </p>
+          <div
+            key={index}
+            className={`p-2 my-1 rounded-md ${
+              msg.role === "bot" ? "bg-gray-200 text-left" : "bg-blue-500 text-white text-right"
+            }`}
+          >
+            {msg.text}
+          </div>
         ))}
       </div>
-      <div className="mt-4 flex">
+      <div className="flex mt-2">
         <input
-          className="border p-2 flex-grow"
+          type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Напишите ваш запрос..."
+          className="flex-1 p-2 border rounded-l-md"
+          placeholder="Введите сообщение..."
         />
-        <button className="bg-blue-500 text-white p-2 ml-2" onClick={sendMessage}>
-          Отправить
+        <button
+          onClick={sendMessage}
+          className="bg-blue-500 text-white px-4 py-2 rounded-r-md"
+        >
+          ➤
         </button>
       </div>
     </div>
