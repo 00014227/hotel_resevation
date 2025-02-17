@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import ChatBot from "@/components/AIChat";
 
 export default function HotelChat() {
   const [messages, setMessages] = useState([]);
@@ -70,6 +71,7 @@ export default function HotelChat() {
 
   return (
     <div className="max-w-md mx-auto p-4 border rounded-lg shadow-lg">
+      <ChatBot/>
       <div className="h-80 overflow-y-auto p-2 border-b">
         {messages.map((msg, index) => (
           <div
