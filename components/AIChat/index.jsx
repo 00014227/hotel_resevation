@@ -25,6 +25,8 @@ export default function ChatBot() {
         const fakeHotels = [
             { id: 1, name: "Grand Hotel", price: "$200", location: "New York", image: "https://via.placeholder.com/150" },
             { id: 2, name: "Cozy Inn", price: "$150", location: "Los Angeles", image: "https://via.placeholder.com/150" },
+            { id: 1, name: "Grand Hotel", price: "$200", location: "New York", image: "https://via.placeholder.com/150" },
+            { id: 2, name: "Cozy Inn", price: "$150", location: "Los Angeles", image: "https://via.placeholder.com/150" },
         ];
 
         setHotels(fakeHotels);
@@ -68,7 +70,7 @@ export default function ChatBot() {
                         <Button onClick={handleSearch}>Search</Button>
                     </div>
 
-                    {/* Suggested Features */}
+                    {/* Suggested Features  we need to remove to other file!!!!!!*/}
                     <Tabs defaultValue={features[0].label} className="w-full">
                         <TabsList className="flex gap-2 flex-wrap">
                             {features.map((feature) => (
@@ -84,8 +86,8 @@ export default function ChatBot() {
                         ))}
                     </Tabs>
 
-                    {/* Hotel Results */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    {/* Hotel Results we can also create separeate folder to it */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 overflow-y-auto">
                         {hotels.map((hotel) => (
                             <div key={hotel.id} className="border p-4 rounded-lg">
                                 <img src={hotel.image} alt={hotel.name} className="w-full h-32 object-cover rounded-lg" />
