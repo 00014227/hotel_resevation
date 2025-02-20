@@ -13,9 +13,9 @@ export default function HotelChat() {
   const [amenities, setAmenities] = useState("");
   const router = useRouter();
 
-  useEffect(() => {
-    startChat();
-  }, []);
+  // useEffect(() => {
+  //   startChat();
+  // }, []);
 
   async function startChat() {
     const response = await fetch("/api/hotel-chat", {

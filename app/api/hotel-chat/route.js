@@ -1,60 +1,42 @@
-import { supabase } from "@/app/lib/supabaseClient";
-import { NextResponse } from "next/server";
+import { OpenAI } from "openai";
+
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function POST(req) {
-  try {
-    const { message, step, location, budget, amenities } = await req.json();
+    try {
+        const body = await req.json();
+        const { userPreferences } = body;
 
-    let botReply = "";
-    let nextStep = "";
-    let hotels = [];
-    const numericBudget = Number(budget);
-    const amenitiesArray  = Array.isArray(amenities) ? amenities : [amenities]
-    if (!message) {
-      return NextResponse.json({
-        reply: "Hello! I will help you find a hotel. In which city are you looking for a hotel?",
-        step: "location",
-      });
+        console.log("Received user preferences:", userPreferences); // Debugging log
+
+        const prompt = `
+            You are an AI travel assistant helping a user find the perfect hotel.
+            So far, the user has provided these details:
+            ${JSON.stringify(userPreferences, null, 2)}
+            Based on this, ask the **next most relevant question** to refine the search further.
+            Example:
+            first always ask location, then budget and emenities, not repete same question.
+            - If the user mentioned a city but not budget, ask about budget.
+            - If budget is set but no amenities, ask which amenities are important.
+            - If all details are provided, suggest hotels.
+            Do NOT repeat previous questions. Keep your question short and conversational.
+        `;
+
+        const response = await openai.chat.completions.create({
+            model: "gpt-4o-mini",
+            messages: [{ role: "system", content: prompt }],
+            temperature: 0.7,
+            max_tokens: 50,
+        });
+
+        console.log("OpenAI API Response:", response);
+
+        const nextQuestion = response.choices[0]?.message?.content || "Would you like to refine your search further?";
+        return Response.json({ nextQuestion });
+    } catch (error) {
+        console.error("OpenAI API Error:", error);
+        return Response.json({ error: "Failed to generate next question" }, { status: 500 });
     }
-
-    switch (step) {
-      case "location":
-        botReply = "Great! What is your budget per night in USD?";
-        nextStep = "budget";
-        break;
-      case "budget":
-        botReply = "Got it! What amenities are important to you? (e.g., pool, Wi-Fi, parking)";
-        nextStep = "amenities";
-        break;
-      case "amenities":
-        botReply = "Thanks! Now I'll find some hotels based on your preferences...";
-        const orConditions = amenitiesArray.map((a) => `amenities.ilike.%${a.toLowerCase()}%`).join(",");
-
-        const { data, error } = await supabase
-        .from("hotels")
-        .select("id, name, address, price, amenities, image_url")
-        .ilike("LOWER(address->>region)", `%${location.toLowerCase()}%`) // Case-insensitive location match
-        .lte("price", numericBudget) // Filter by budget
-        .contains('amenities', amenitiesArray)
-
-        if (error) {
-          console.error("Supabase Error:", error);
-          return NextResponse.json({ error: "Failed to fetch hotels" }, { status: 500 });
-        }
-
-        hotels = data || [];
-        botReply = hotels.length ? "Here are some hotels for you:" : "Sorry, no hotels match your criteria.";
-        nextStep = "done";
-        break;
-
-      default:
-        botReply = "Let me know if you need further assistance!";
-        nextStep = "done";
-    }
-
-    return NextResponse.json({ reply: botReply, step: nextStep, hotels });
-  } catch (error) {
-    console.error("Server Error:", error);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
-  }
 }

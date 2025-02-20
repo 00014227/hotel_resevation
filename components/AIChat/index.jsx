@@ -1,38 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { MessageCircle, MapPin, Calendar, Tag, Search } from "lucide-react";
+import AITabs from "./Tabs";
+import HotelResults from "./HotelResults";
+import { addMessage, updateUserPreferences } from "@/app/lib/features/findHotelAi/aiChat.slice";
+import { fetchFollowUpQuestion, fetchHotels } from "@/app/lib/features/findHotelAi/findHotelAI.thunk";
+import { useDispatch, useSelector } from "react-redux";
+import { useAIFindHotel } from "@/app/hooks/aiChatBot/useAIFindHotel";
 
 export default function ChatBot() {
-    const [messages, setMessages] = useState([
-        { role: "bot", text: "Hello! How can I assist you today?" },
-    ]);
+    const dispatch = useDispatch();
     const [input, setInput] = useState("");
-    const [hotels, setHotels] = useState([]);
+    const {hotels, messages, handleUserInput, fetchNextQuestion, useAIFindHotel2} = useAIFindHotel()
+    console.log(messages, 'mmmmm')
+    useEffect(() => {
+        console.log("Updated messages:", messages);
+    }, [messages]); // ✅ This logs only when `messages` updates
 
-    const features = [
-        { label: "Find Hotels", icon: <Search size={18} /> },
-        { label: "Multi-City Search", icon: <MapPin size={18} /> },
-        { label: "Dynamic Pricing", icon: <Tag size={18} /> },
-        { label: "Nearby Attractions", icon: <Calendar size={18} /> },
-    ];
-
-    const handleSearch = () => {
+    const handleSendMessage = () => {
         if (input.trim() === "") return;
-
-        // Simulating fetching hotel results
-        const fakeHotels = [
-            { id: 1, name: "Grand Hotel", price: "$200", location: "New York", image: "https://via.placeholder.com/150" },
-            { id: 2, name: "Cozy Inn", price: "$150", location: "Los Angeles", image: "https://via.placeholder.com/150" },
-            { id: 1, name: "Grand Hotel", price: "$200", location: "New York", image: "https://via.placeholder.com/150" },
-            { id: 2, name: "Cozy Inn", price: "$150", location: "Los Angeles", image: "https://via.placeholder.com/150" },
-        ];
-
-        setHotels(fakeHotels);
-        setMessages([...messages, { role: "user", text: input }, { role: "bot", text: "Here are some hotels for you:" }]);
-        setInput("");
+        handleUserInput(input);
+        setInput(""); // Clear input field after sending
     };
+
 
     return (
         <Dialog>
@@ -42,9 +33,9 @@ export default function ChatBot() {
             <DialogContent className="max-w-[70vw] p-5 rounded-2xl">
                 <div className="flex flex-col space-y-4">
                     {/* Chat Header */}
-                    <div className="text-xl font-semibold flex items-center gap-2">
+                    <DialogTitle className="text-xl font-semibold flex items-center gap-2">
                         <MessageCircle size={24} /> AI Travel Assistant
-                    </div>
+                    </DialogTitle>
 
                     {/* Chat Window */}
                     <div className="bg-gray-100 p-4 rounded-lg h-[300px] overflow-y-auto">
@@ -67,36 +58,13 @@ export default function ChatBot() {
                             onChange={(e) => setInput(e.target.value)}
                             className="border p-2 rounded-lg flex-1"
                         />
-                        <Button onClick={handleSearch}>Search</Button>
+                        <Button onClick={handleSendMessage}>Search</Button>
                     </div>
 
-                    {/* Suggested Features  we need to remove to other file!!!!!!*/}
-                    <Tabs defaultValue={features[0].label} className="w-full">
-                        <TabsList className="flex gap-2 flex-wrap">
-                            {features.map((feature) => (
-                                <TabsTrigger key={feature.label} value={feature.label}>
-                                    {feature.icon} {feature.label}
-                                </TabsTrigger>
-                            ))}
-                        </TabsList>
-                        {features.map((feature) => (
-                            <TabsContent key={feature.label} value={feature.label}>
-                                <p className="text-gray-600">{`You selected: ${feature.label}`}</p>
-                            </TabsContent>
-                        ))}
-                    </Tabs>
+                    <AITabs action={useAIFindHotel2}/>
 
                     {/* Hotel Results we can also create separeate folder to it */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 overflow-y-auto">
-                        {hotels.map((hotel) => (
-                            <div key={hotel.id} className="border p-4 rounded-lg">
-                                <img src={hotel.image} alt={hotel.name} className="w-full h-32 object-cover rounded-lg" />
-                                <h3 className="font-semibold mt-2">{hotel.name}</h3>
-                                <p className="text-sm text-gray-500">{hotel.location}</p>
-                                <p className="font-bold">{hotel.price}</p>
-                            </div>
-                        ))}
-                    </div>
+                    <HotelResults hotels = {hotels}/>
                 </div>
             </DialogContent>
         </Dialog>
