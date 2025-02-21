@@ -1,31 +1,45 @@
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/app/lib/supabaseClient";
-import { useState, useCallback } from "react";
 
 export function useAIFindHotel() {
     const [messages, setMessages] = useState([
         { role: "bot", text: "Hello! How can I assist you today?" },
     ]);
-    const [hotels, setHotels] = useState([]); 
+    const [hotels, setHotels] = useState([]);
     const [userPreferences, setUserPreferences] = useState({});
+    const [isProcessing, setIsProcessing] = useState(false); // Prevent duplicate questions
 
     async function handleUserInput(input) {
-        setUserPreferences((prev) => ({
-            ...prev,
-            location: prev.location || input,
-            budget: prev.budget || input,
-            amenities: prev.amenities || input.split(","),
-        }));
+        setIsProcessing(true);
+
+        setUserPreferences((prev) => {
+            const updatedPreferences = { ...prev };
+
+            if (!prev.location) updatedPreferences.location = input;
+            else if (!prev.budget) updatedPreferences.budget = input;
+            else if (!prev.amenities) updatedPreferences.amenities = input.split(",");
+
+            return updatedPreferences;
+        });
 
         setMessages((prev) => [...prev, { role: "user", text: input }]);
+    }
 
-        const nextQuestion = await fetchNextQuestion();
+    useEffect(() => {
+        if (!isProcessing) return;
 
-        setMessages((prev) => [...prev, { role: "bot", text: nextQuestion }]);
+        async function processNextQuestion() {
+            const nextQuestion = await fetchNextQuestion(userPreferences);
+            setMessages((prev) => [...prev, { role: "bot", text: nextQuestion }]);
+            setIsProcessing(false);
+        }
+
+        processNextQuestion();
 
         if (userPreferences.location && userPreferences.budget && userPreferences.amenities) {
             fetchHotels();
         }
-    }
+    }, [userPreferences]);
 
     async function fetchHotels() {
         const { data, error } = await supabase
@@ -44,12 +58,14 @@ export function useAIFindHotel() {
         setMessages((prev) => [...prev, { role: "bot", text: "Here are some hotels based on your preferences!" }]);
     }
 
-    async function fetchNextQuestion() {
+    async function fetchNextQuestion(updatedPreferences) {
         try {
+            console.log("Fetching next question with:", updatedPreferences);
+
             const response = await fetch("/api/hotel-chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userPreferences }),
+                body: JSON.stringify({ userPreferences: updatedPreferences }),
             });
 
             if (!response.ok) {
@@ -73,7 +89,7 @@ export function useAIFindHotel() {
         await new Promise((resolve) => setTimeout(resolve, 0));
 
         try {
-            const firstQuestion = await fetchNextQuestion();
+            const firstQuestion = await fetchNextQuestion({});
             setMessages((prev) => [...prev, { role: "bot", text: firstQuestion }]);
         } catch (error) {
             console.error("Error fetching AI question:", error);
