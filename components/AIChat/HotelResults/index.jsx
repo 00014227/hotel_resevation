@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
+import DescribeButton from './components/DescribeBtn'
 
 export default function HotelResults({hotels}) {
     return (
@@ -10,6 +11,7 @@ export default function HotelResults({hotels}) {
                     <h3 className="font-semibold mt-2">{hotel.name}</h3>
                     <p className="text-sm text-gray-500">{hotel.location}</p>
                     <p className="font-bold">{hotel.price}</p>
+                    <DescribeButton hotel={hotel}/>
                 </Link>
             ))}
         </div>)
