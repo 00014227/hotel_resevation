@@ -8,6 +8,7 @@ import { addMessage, updateUserPreferences } from "@/app/lib/features/findHotelA
 import { fetchFollowUpQuestion, fetchHotels } from "@/app/lib/features/findHotelAi/findHotelAI.thunk";
 import { useDispatch, useSelector } from "react-redux";
 import { useAIFindHotel } from "@/app/hooks/aiChatBot/useAIFindHotel";
+import FindHotelUI from "./Chat/FindHotelUI";
 
 export default function ChatBot() {
     const dispatch = useDispatch();
@@ -39,14 +40,7 @@ export default function ChatBot() {
 
                     {/* Chat Window */}
                     <div className="bg-gray-100 p-4 rounded-lg h-[300px] overflow-y-auto">
-                        {messages.map((msg, index) => (
-                            <div
-                                key={index}
-                                className={`p-2 my-1 rounded-lg max-w-xs ${msg.role === "bot" ? "bg-blue-500 text-white self-start" : "bg-gray-300 self-end"}`}
-                            >
-                                {msg.text}
-                            </div>
-                        ))}
+                        <FindHotelUI messages={messages}/>
                     </div>
 
                     {/* User Input */}

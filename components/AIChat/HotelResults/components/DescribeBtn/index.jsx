@@ -4,14 +4,13 @@ import { useState } from "react";
 export default function DescribeButton({hotel}) {
     const [description, setDescription] = useState("");
     const [loading, setLoading] = useState(false)
-    console.log(description, 'desc')
-    async function fetchHotelDescription(hotelId, hotelName) {
+    async function fetchHotelDescription(hotelName, descriptionType = "default") {
         setLoading(true)
         try {
             const response = await fetch("/api/hotel-description", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({hotelId, hotelName})
+                body: JSON.stringify({hotelName, descriptionType })
             })
             const data = await response.json();
             setDescription(data.description);
@@ -23,7 +22,9 @@ export default function DescribeButton({hotel}) {
 
         }
     }
+    console.log(description, 'desc')
+
   return (
-    <Button onClick={() => fetchHotelDescription(hotel.id, hotel.name)}> Describe This Hotel</Button>
+    <Button onClick={() => fetchHotelDescription(hotel.name)}> Describe This Hotel</Button>
   )
 }

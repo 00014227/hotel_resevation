@@ -8,13 +8,12 @@ const openai = new OpenAI({
 })
 
 
-export default async function handler(req, res) {
-    if (req.method !== "POST") {
-        return res.status(405).json({ err: "Method Not Allowed" })
-    }
-
+export async function POST(req) {
+    console.log(req, 'req')
     try {
-        const { hotelName, descriptionType = "default" } = req.body
+        const body = await req.json();
+
+        const { hotelName, descriptionType = "default" } = body
 
         // fetch hotel from supabase
 
@@ -26,13 +25,14 @@ export default async function handler(req, res) {
 
         if (error) {
             console.error("Supabase Error:", error);
-            return res.status(500).json({ error: "Failed to fetch hotel details" });
+            return Response.json({ error: "Failed to fetch hotel details" });
         }
 
         let prompt;
 
         if (hotels.length > 0) {
             const hotel = hotels[0];
+            console.log(hotel, 'hhhh')
             prompt = `Generate an engaging description for "${hotel.name}" located at ${hotel.address}. \n\n` +
             `It offers the following amenities: ${hotel.amenities.join(", ")}. ` +
             `The average price per night is $${hotel.price}.\n\n` +
@@ -44,20 +44,22 @@ export default async function handler(req, res) {
 
         // Call open ai
 
-        const response = await openai.createChatCompletion({
+        const response = await openai.chat.completions.create({
             model: "gpt-4o-mini",
             messages: [{ role: "system", content: prompt }],
             temperature: 0.7,
             max_tokens: 200,
         });
+        console.log("OpenAI Response:", response); // ✅ Debugging
+        console.log("Message Object:", response.choices[0].message);
 
-        const description = response.data.choices[0]?.message?.content || "No description available.";
+        const description = response.choices[0].message?.content || "No description available.";
 
-        return res.status(200).json({ description });
+        return Response.json({ description });
 
 
     } catch (error) {
         console.error("OpenAI API Error:", error);
-        return res.status(500).json({ error: "Failed to generate hotel description" });
+        return Response.json({ error: "Failed to generate hotel description" });
     }
 }
