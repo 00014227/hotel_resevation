@@ -4,20 +4,15 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { MessageCircle, MapPin, Calendar, Tag, Search } from "lucide-react";
 import AITabs from "./Tabs";
 import HotelResults from "./HotelResults";
-import { addMessage, updateUserPreferences } from "@/app/lib/features/findHotelAi/aiChat.slice";
-import { fetchFollowUpQuestion, fetchHotels } from "@/app/lib/features/findHotelAi/findHotelAI.thunk";
 import { useDispatch, useSelector } from "react-redux";
 import { useAIFindHotel } from "@/app/hooks/aiChatBot/useAIFindHotel";
 import FindHotelUI from "./Chat/FindHotelUI";
+import AIChat from "./Chat";
 
 export default function ChatBot() {
     const dispatch = useDispatch();
     const [input, setInput] = useState("");
-    const {hotels, messages, handleUserInput, fetchNextQuestion, useAIFindHotel2} = useAIFindHotel()
-    console.log(messages, 'mmmmm')
-    useEffect(() => {
-        console.log("Updated messages:", messages);
-    }, [messages]); // ✅ This logs only when `messages` updates
+    const { messages, handleUserInput, fetchNextQuestion, useAIFindHotel2} = useAIFindHotel()
 
     const handleSendMessage = () => {
         if (input.trim() === "") return;
@@ -40,7 +35,7 @@ export default function ChatBot() {
 
                     {/* Chat Window */}
                     <div className="bg-gray-100 p-4 rounded-lg h-[300px] overflow-y-auto">
-                        <FindHotelUI messages={messages}/>
+                        <AIChat messages={messages}/>
                     </div>
 
                     {/* User Input */}
@@ -58,7 +53,7 @@ export default function ChatBot() {
                     <AITabs action={useAIFindHotel2}/>
 
                     {/* Hotel Results we can also create separeate folder to it */}
-                    <HotelResults hotels = {hotels}/>
+                    <HotelResults/>
                 </div>
             </DialogContent>
         </Dialog>

@@ -1,30 +1,19 @@
+import { setMsgType, setSelectedHotelId } from '@/app/lib/features/AIChat/aichat.slice';
+import { fetchHotelDescription } from '@/app/lib/features/AIChat/aiChat.thunk';
 import { Button } from '@/components/ui/button'
-import { useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function DescribeButton({hotel}) {
-    const [description, setDescription] = useState("");
-    const [loading, setLoading] = useState(false)
-    async function fetchHotelDescription(hotelName, descriptionType = "default") {
-        setLoading(true)
-        try {
-            const response = await fetch("/api/hotel-description", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({hotelName, descriptionType })
-            })
-            const data = await response.json();
-            setDescription(data.description);
-        } catch (error) {
-            console.error("Error fetching hotel description:", error);
-            setDescription("Failed to generate a description.");
-        } finally {
-            setLoading(false);
-
-        }
+export default function DescribeButton({hotel, hotelId}) {
+    const dispatch = useDispatch()
+    const msgType = useSelector((state) => state.aichat.msgType);
+    
+    function call() {
+        dispatch(setSelectedHotelId(hotelId))
+        dispatch(fetchHotelDescription(hotel.name, hotel.image_url))
+        dispatch(setMsgType("hotel-detail"))
     }
-    console.log(description, 'desc')
 
   return (
-    <Button onClick={() => fetchHotelDescription(hotel.name)}> Describe This Hotel</Button>
+    <Button onClick={call}> Describe This Hotel</Button>
   )
 }
