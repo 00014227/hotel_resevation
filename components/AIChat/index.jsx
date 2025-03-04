@@ -34,7 +34,7 @@ export default function ChatBot() {
                     </DialogTitle>
 
                     {/* Chat Window */}
-                    <div className="bg-gray-100 p-4 rounded-lg h-[300px] overflow-y-auto">
+                    <div className="bg-gray-100 p-4 rounded-lg h-[50vh] overflow-y-auto flex">
                         <AIChat messages={messages}/>
                     </div>
 

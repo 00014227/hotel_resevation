@@ -1,4 +1,4 @@
-import { fetchHotelDescription, fetchHotels } from "./aiChat.thunk";
+import { fetchHotelComparison, fetchHotelDescription, fetchHotels } from "./aiChat.thunk";
 
 const aiChatExtraReducer = (builder) => {
     builder
@@ -27,6 +27,21 @@ const aiChatExtraReducer = (builder) => {
         .addCase(fetchHotelDescription.rejected, (state, action) => {
             state.isLoading = false;
             state.error = action.payload;
+        })
+
+        // comparison
+
+        .addCase(fetchHotelComparison.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+        })
+        .addCase(fetchHotelComparison.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.comparisonResult = action.payload;
+        })
+        .addCase(fetchHotelComparison.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = "Failed to fetch hotel comparison";
         });
 }
 

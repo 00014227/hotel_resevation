@@ -1,19 +1,23 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
+import CompareHotels from './CompareHotels';
 import FindHotelUI from './FindHotelUI';
 import HotelDetailMessage from './HotelDetailMessage';
 
-export default function AIChat({messages}) {
+export default function AIChat({ messages }) {
     const msgType = useSelector((state) => state.aichat.msgType);
+    const chatHistory = useSelector((state) => state.aichat.chatHistory);
 
-    switch (msgType) {
-        case "find-hotel":
-            return <FindHotelUI messages={messages}/>
-        case "hotel-detail":
-            return <HotelDetailMessage/>
-        default:
-            return <FindHotelUI messages={messages}/>
+    return (
+        <div className='w-full'>
+            {chatHistory.map((component, index) => (
+                <div key={index}>
+                    {component === "find-hotel" && <FindHotelUI messages={messages} />}
+                    {component === "hotel-detail" && <HotelDetailMessage />}
+                    {component === "compare" && <CompareHotels/>}
+                </div>
+            ))}
+        </div>
+    );
 
-    }
-  
 }

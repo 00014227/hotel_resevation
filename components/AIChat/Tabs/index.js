@@ -2,6 +2,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { useCallback, useEffect } from 'react'
 import { MessageCircle, MapPin, Calendar, Tag, Search } from "lucide-react";
 import { useAIFindHotel } from '@/app/hooks/aiChatBot/useAIFindHotel';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchHotelComparison } from '@/app/lib/features/AIChat/aiChat.thunk';
+import { toast } from 'react-toastify';
 
 
 
@@ -13,9 +16,14 @@ const features = [
 ];
 
 export default function AITabs( {action} ) {
+    const dispatch = useDispatch()
+    const { selectedHotels } = useSelector((state) => state.aichat);
 
 
 
+    const handleCompare = () => {
+        dispatch(fetchHotelComparison(selectedHotels));
+    };
     
     return (
         <Tabs defaultValue={features[1].label} className="w-full">
@@ -27,8 +35,8 @@ export default function AITabs( {action} ) {
                 <TabsTrigger onClick={action} value="Find Hotels">
                     <Search size={18} /> Find Hotels
                 </TabsTrigger>
-                <TabsTrigger value="Dynamic Pricing">
-                    <Tag size={18} /> Dynamic Pricing
+                <TabsTrigger onClick={handleCompare} value="Dynamic Pricing">
+                    <Tag size={18} /> Compare
                 </TabsTrigger>
                 <TabsTrigger value="Nearby Attractions">
                     <Calendar size={18} /> Nearby Attractions

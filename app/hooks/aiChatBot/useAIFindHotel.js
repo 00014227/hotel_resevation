@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchHotels } from "@/app/lib/features/AIChat/aiChat.thunk";
+import { addChatComponent } from "@/app/lib/features/AIChat/aichat.slice";
 
 export function useAIFindHotel() {
     const dispatch = useDispatch();
@@ -79,6 +80,7 @@ export function useAIFindHotel() {
 
     // ✅ Start the AI Chat
     const useAIFindHotel2 = useCallback(async () => {
+        dispatch(addChatComponent("find-hotel"))
         setMessages((prev) => [
             ...prev,
             { role: "bot", text: "You selected 'Find Hotels'. Let's narrow down your search!" },

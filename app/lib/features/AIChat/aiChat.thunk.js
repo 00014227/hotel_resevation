@@ -39,3 +39,24 @@ export const fetchHotelDescription = createAsyncThunk(
         }
     }
 )
+
+
+export const fetchHotelComparison = createAsyncThunk(
+    'aichat/fetchHotelComparison',
+    async (selectedHotels) => {
+        try {
+            const response = await fetch("/api/compare-hotels", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({hotels: selectedHotels}),
+            });
+
+            const data = await response.json();
+            return data
+        } catch (error) {
+            console.error("Error fetching hotel comparison:", error);
+            toast.error('Error fetching hotel comparison')
+
+        }
+    }
+)
