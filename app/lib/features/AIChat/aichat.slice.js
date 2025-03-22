@@ -33,7 +33,6 @@ const aichatSlice = createSlice({
         toggleHotelSelection: (state, action) => {
             const hotelId = action.payload;
             const index = state.selectedHotels.indexOf(hotelId);
-
             if (index > -1) {
                 // Hotel is already selected → remove it
                 state.selectedHotels = state.selectedHotels.filter(id => id !== hotelId);

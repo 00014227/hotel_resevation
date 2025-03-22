@@ -2,30 +2,38 @@ import OpenAI from "openai";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-export default async function handler(req, res) {
-    if (req.method !== "POST") {
-        return res.status(405).json({ error: "Method not allowed" });
-    }
-
-    const { hotels } = req.body;
-    if (!hotels || hotels.length < 2) {
-        return res.status(400).json({ error: "At least two hotels are required for comparison." });
-    }
-
-    const prompt = `Compare these hotels based on location, price, amenities, and guest reviews:\n\n${hotels
-        .map((hotel, index) => `${index + 1}. ${hotel}`)
-        .join("\n")}`;
-
+export async function POST(req) {
     try {
+        const body = await req.json();
+        const { selectedHotels } = body;
+        console.log(selectedHotels, "selllecttt")
+
+        if (!selectedHotels || selectedHotels.length < 2) {
+            console.error("🚨 Error: At least two hotels are required for comparison.");
+            return new Response(JSON.stringify({ error: "At least two hotels are required for comparison." }), { status: 400 });
+        }
+
+        const prompt = `Compare these hotels based on location, price, and amenities:\n\n${selectedHotels
+            .map((hotel, index) => `${index + 1}. ${hotel.name}, Location: ${hotel.location}, Price: ${hotel.price}`)
+            .join("\n")}`;
+
         const response = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            messages: [{ role: "system", content: "You are an expert travel assistant." }, { role: "user", content: prompt }],
+            model: "gpt-4o",
+            messages: [
+                { role: "system", content: "You are an expert travel assistant." },
+                { role: "user", content: prompt }
+            ],
         });
 
         const comparison = response.choices[0].message.content;
-        return res.status(200).json(comparison);
+
+        // 🖥️ Log the comparison result to the server console
+        console.log("📝 AI Hotel Comparison Result:\n", comparison);
+
+        return new Response(JSON.stringify({ comparison }), { status: 200 });
+
     } catch (error) {
-        console.error("OpenAI Error:", error);
-        return res.status(500).json({ error: "Failed to generate a comparison." });
+        console.error("🚨 API Error:", error);
+        return new Response(JSON.stringify({ error: "Internal Server Error", details: error.message }), { status: 500 });
     }
 }

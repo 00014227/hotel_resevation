@@ -2,8 +2,8 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 
 export default function CompareHotels() {
-    const { selectedHotels, isLoading, comparisonResult } = useSelector((state) => state.aichat);
-
+    const { selectedHotels, isLoading, comparisonResult, selectedHotelId } = useSelector((state) => state.aichat);
+    console.log(selectedHotelId, 'ressss')
     return (
         <div>
             {comparisonResult && (

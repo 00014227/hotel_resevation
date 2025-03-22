@@ -48,11 +48,15 @@ export const fetchHotelComparison = createAsyncThunk(
             const response = await fetch("/api/compare-hotels", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({hotels: selectedHotels}),
+                body: JSON.stringify({ selectedHotels }),
             });
 
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
             const data = await response.json();
-            return data
+            return data; // Ensure this is a valid JSON object
         } catch (error) {
             console.error("Error fetching hotel comparison:", error);
             toast.error('Error fetching hotel comparison')
