@@ -1,24 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DescribeButton from "./components/DescribeBtn";
 import { Button } from "@/components/ui/button";
 import { toggleHotelSelection } from "@/app/lib/features/AIChat/aichat.slice";
 
 export default function HotelResults() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { hotels, selectedHotels, selectedHotelId } = useSelector((state) => state.aichat);
 
-  console.log(selectedHotelId, 'hhhhhhIddddd')
+  console.log(selectedHotelId, "Selected Hotel ID");
+  console.log(selectedHotels, "Selected Hotels");
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
       {hotels.map((hotel) => {
-        const isSelected = selectedHotels.includes(hotel.id);
+        const isSelected = selectedHotels.some((selected) => selected.id === hotel.id);
 
         return (
           <div
             key={hotel.id}
-            onClick={() => dispatch(toggleHotelSelection(hotel.id))}
+            onClick={() => dispatch(toggleHotelSelection(hotel))} // Pass the whole hotel object
             className={`border p-4 rounded-lg cursor-pointer transition-all ${
               isSelected ? "bg-blue-100 border-blue-500" : "bg-white"
             }`}

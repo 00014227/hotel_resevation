@@ -5,6 +5,7 @@ import { useAIFindHotel } from '@/app/hooks/aiChatBot/useAIFindHotel';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchHotelComparison } from '@/app/lib/features/AIChat/aiChat.thunk';
 import { toast } from 'react-toastify';
+import { addChatComponent } from '@/app/lib/features/AIChat/aichat.slice';
 
 
 
@@ -23,6 +24,7 @@ export default function AITabs( {action} ) {
 
     const handleCompare = () => {
         dispatch(fetchHotelComparison(selectedHotels));
+        dispatch(addChatComponent("compare"))
     };
     
     return (
@@ -35,7 +37,7 @@ export default function AITabs( {action} ) {
                 <TabsTrigger onClick={action} value="Find Hotels">
                     <Search size={18} /> Find Hotels
                 </TabsTrigger>
-                <TabsTrigger onClick={handleCompare} value="Dynamic Pricing">
+                <TabsTrigger onClick={handleCompare} value="Compare">
                     <Tag size={18} /> Compare
                 </TabsTrigger>
                 <TabsTrigger value="Nearby Attractions">

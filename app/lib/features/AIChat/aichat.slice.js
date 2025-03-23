@@ -31,14 +31,15 @@ const aichatSlice = createSlice({
             state.chatHistory = [action.payload]; // Replace chat history with a single component
         },
         toggleHotelSelection: (state, action) => {
-            const hotelId = action.payload;
-            const index = state.selectedHotels.indexOf(hotelId);
+            const selectedHotel = action.payload;
+            const index = state.selectedHotels.findIndex(hotel => hotel.id === selectedHotel.id);
+
             if (index > -1) {
-                // Hotel is already selected → remove it
-                state.selectedHotels = state.selectedHotels.filter(id => id !== hotelId);
+                // If hotel is already selected, remove it
+                state.selectedHotels = state.selectedHotels.filter(hotel => hotel.id !== selectedHotel.id);
             } else {
-                // Hotel is not selected → add it
-                state.selectedHotels.push(hotelId);
+                // Otherwise, add the full hotel object
+                state.selectedHotels.push(selectedHotel);
             }
         },
 
