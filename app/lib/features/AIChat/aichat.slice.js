@@ -12,6 +12,7 @@ const initialState = {
     selectedHotelId: null,
     selectedHotels: [], // Store selected hotels for comparison
     comparisonResult: null,
+    nearbyAttractions: null,
 }
 
 const aichatSlice = createSlice({

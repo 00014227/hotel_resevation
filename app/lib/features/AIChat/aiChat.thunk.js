@@ -59,8 +59,28 @@ export const fetchHotelComparison = createAsyncThunk(
             return data; // Ensure this is a valid JSON object
         } catch (error) {
             console.error("Error fetching hotel comparison:", error);
-            toast.error('Error fetching hotel comparison')
+            toast.error('Please select at least 2 hotels')
 
+        }
+    }
+)
+
+export const fetchNearbyAttractions = createAsyncThunk(
+    'aichat/fetchNearbyAttractions',
+    async (hotelName, location) => {
+        try {
+            const response = await fetch("/api/nearby-attractions", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ hotelName, location }),
+              });
+              
+            const data = await response.json();
+
+            return data
+        } catch (error) {
+            console.error("Error fetching hotel comparison:", error);
+            toast.error('Please select one hotels')  
         }
     }
 )

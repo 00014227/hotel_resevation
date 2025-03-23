@@ -3,7 +3,7 @@ import { useCallback, useEffect } from 'react'
 import { MessageCircle, MapPin, Calendar, Tag, Search } from "lucide-react";
 import { useAIFindHotel } from '@/app/hooks/aiChatBot/useAIFindHotel';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchHotelComparison } from '@/app/lib/features/AIChat/aiChat.thunk';
+import { fetchHotelComparison, fetchNearbyAttractions } from '@/app/lib/features/AIChat/aiChat.thunk';
 import { toast } from 'react-toastify';
 import { addChatComponent } from '@/app/lib/features/AIChat/aichat.slice';
 
@@ -21,11 +21,20 @@ export default function AITabs( {action} ) {
     const { selectedHotels } = useSelector((state) => state.aichat);
 
 
-
     const handleCompare = () => {
         dispatch(fetchHotelComparison(selectedHotels));
         dispatch(addChatComponent("compare"))
     };
+
+    const handleAttractions = () => {
+        const firstHotel = selectedHotels[0]
+        const hotelName = firstHotel.name
+        const hotelAdress = firstHotel.address.full
+
+        console.log(hotelName, hotelAdress, 'ssdsdsdsd')
+        dispatch(fetchNearbyAttractions(hotelName, hotelAdress))
+        dispatch(addChatComponent("near-attractions"))
+    }
     
     return (
         <Tabs defaultValue={features[1].label} className="w-full">
@@ -40,7 +49,7 @@ export default function AITabs( {action} ) {
                 <TabsTrigger onClick={handleCompare} value="Compare">
                     <Tag size={18} /> Compare
                 </TabsTrigger>
-                <TabsTrigger value="Nearby Attractions">
+                <TabsTrigger onClick={handleAttractions} value="Nearby Attractions">
                     <Calendar size={18} /> Nearby Attractions
                 </TabsTrigger>
             </TabsList>

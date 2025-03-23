@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import CompareHotels from './CompareHotels';
 import FindHotelUI from './FindHotelUI';
 import HotelDetailMessage from './HotelDetailMessage';
+import NearByAttractions from './Attractions';
 
 export default function AIChat({ messages }) {
     const msgType = useSelector((state) => state.aichat.msgType);
@@ -15,6 +16,7 @@ export default function AIChat({ messages }) {
                     {component === "find-hotel" && <FindHotelUI messages={messages} />}
                     {component === "hotel-detail" && <HotelDetailMessage />}
                     {component === "compare" && <CompareHotels/>}
+                    {component === "near-attractions" && <NearByAttractions/>}
                 </div>
             ))}
         </div>

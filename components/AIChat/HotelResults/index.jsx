@@ -6,10 +6,8 @@ import { toggleHotelSelection } from "@/app/lib/features/AIChat/aichat.slice";
 
 export default function HotelResults() {
   const dispatch = useDispatch();
-  const { hotels, selectedHotels, selectedHotelId } = useSelector((state) => state.aichat);
+  const { hotels, selectedHotels } = useSelector((state) => state.aichat);
 
-  console.log(selectedHotelId, "Selected Hotel ID");
-  console.log(selectedHotels, "Selected Hotels");
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
