@@ -21,15 +21,6 @@ export default function SearchForm() {
     totalGuests: 1
   })
 
-  const searchParams = {
-    country: '',
-    city: '',
-    checkIn: '2025-01-15',
-    checkOut: '2025-01-20',
-    includePets: true,
-    totalGuests: 1 // Total number of guests (adults + children)
-  };
-
   const handleLocationChange = (e) => {
     const value = e.target.value;
     setSearchHotel((prev) => ({

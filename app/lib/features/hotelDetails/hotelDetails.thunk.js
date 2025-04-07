@@ -25,36 +25,34 @@ export const fetchActiveHotelRooms = createAsyncThunk(
     async ({ checkIn, checkOut, id }, { rejectWithValue }) => {
         console.log(id, 'hjjjj')
         
-              // Step 1: Fetch unavailable room IDs for the given date range
-              const { data: unavailableRooms, error: unavailableRoomsError } = await supabase
-              .rpc('get_unavailable_rooms', { check_in: checkIn, check_out: checkOut });
+        // Step 1: Fetch unavailable room IDs for the given date range
+        const { data: unavailableRooms, error: unavailableRoomsError } = await supabase
+            .rpc('get_unavailable_rooms', { check_in: checkIn, check_out: checkOut });
 
-          if (unavailableRoomsError) {
-              console.error('Error fetching unavailable rooms:', unavailableRoomsError);
-              return rejectWithValue('Failed to fetch unavailable rooms');
-          }
+        if (unavailableRoomsError) {
+            console.error('Error fetching unavailable rooms:', unavailableRoomsError);
+            return rejectWithValue('Failed to fetch unavailable rooms');
+        }
 
-          // Extract unavailable room IDs
-          const unavailableRoomIds = unavailableRooms.map(room => room.room_id);
+        // Extract unavailable room IDs
+        const unavailableRoomIds = unavailableRooms.map(room => room.room_id);
 
-          // Step 2: Fetch all rooms for the specified hotel, excluding unavailable rooms
-          let query = supabase
-              .from('rooms')
-              .select('*')
-              .eq('hotel_id', id);
+        // Step 2: Fetch rooms with amenities and categories for the specified hotel, excluding unavailable rooms
+        let query = supabase
+            .rpc('get_rooms_with_amenities_and_categories', { input_hotel_id: id });
 
-          if (unavailableRoomIds.length > 0) {
-              query = query.not('room_id', 'in', `(${unavailableRoomIds.join(',')})`);
-          }
+        // Exclude unavailable rooms from the query
+        if (unavailableRoomIds.length > 0) {
+            query = query.filter('room_id', 'not.in', unavailableRoomIds);
+        }
 
-          const { data: availableRooms, error: availableRoomsError } = await query;
-
-          if (availableRoomsError) {
-              console.error('Error fetching available rooms:', availableRoomsError);
-              return rejectWithValue('Failed to fetch available rooms');
-          }
-
-          // Return the list of available rooms
-          return availableRooms;
+        const { data: roomsWithAmenities, error: roomsWithAmenitiesError } = await query;
+    
+        if (roomsWithAmenitiesError) {
+            console.error('Error fetching rooms with amenities:', roomsWithAmenitiesError);
+            return rejectWithValue('Failed to fetch rooms with amenities');
+        }
+    
+        return roomsWithAmenities;
     }
 )
