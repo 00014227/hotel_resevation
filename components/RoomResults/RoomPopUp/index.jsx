@@ -24,7 +24,7 @@ export default function RoomPopUp({ room, numberOfNights, hotelId }) {
         );
     };
 
-    const handleReserve = () => {
+    const handleReserve = (roomName, roomPrice) => {
         const checkIn = searchParams.get("checkIn");
         const checkOut = searchParams.get("checkOut");
     
@@ -34,6 +34,8 @@ export default function RoomPopUp({ room, numberOfNights, hotelId }) {
             numberOfNights: numberOfNights.toString(),
             hotelId: hotelId,
             roomId: room.room_id, // optionally pass room id
+            room_name: roomName,
+            room_price: roomPrice
         }).toString();
     
         router.push(`/reserve?${queryString}`);
@@ -103,7 +105,7 @@ export default function RoomPopUp({ room, numberOfNights, hotelId }) {
                     </div>
 
                     {/* Reserve Button */}
-                    <button   onClick={handleReserve} className='mt-6 bg-red-500 text-white py-2 px-4 rounded-xl hover:bg-red-600 transition'>
+                    <button   onClick={handleReserve(room.room_name, room.price)} className='mt-6 bg-red-500 text-white py-2 px-4 rounded-xl hover:bg-red-600 transition'>
                         Reserve Now
                     </button>
                 </div>
