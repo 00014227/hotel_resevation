@@ -29,7 +29,7 @@ export default function HotelDetail() {
 
     const dispatch = useDispatch()
 
-    useEffect(() => {
+    useEffect(() => {   
         const id = params.id
         const checkIn = searchParams.get('checkIn')
         const checkOut = searchParams.get('checkOut')

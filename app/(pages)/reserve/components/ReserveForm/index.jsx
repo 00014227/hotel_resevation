@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+import { toast } from 'react-toastify';
+import { saveUserToSupabase } from '@/app/lib/features/auth/userThunks';
+import { useDispatch } from 'react-redux';
 
-export default function ReserveForm() {
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+
+
+export default function ReserveForm({price = 100}) {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     name: '',
     surname: '',
@@ -16,11 +24,39 @@ export default function ReserveForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Send this data to Supabase or an API
-    console.log('Reservation submitted:', formData);
-    alert('Reservation submitted!');
+    try {
+      const resultAction = await dispatch(saveUserToSupabase(formData));
+
+      if (saveUserToSupabase.fulfilled.match(resultAction)) {
+        toast.success('Reservation saved! Redirecting to payment...');
+        // TODO: Trigger Stripe Checkout
+        const stripe = await stripePromise;
+
+        const response = await fetch('/api/create-checkout-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...formData, price }),
+        });
+    
+        const data = await response.json();
+    
+        const result = await stripe.redirectToCheckout({
+          sessionId: data.id,
+        });
+    
+        if (result.error) {
+          console.error(result.error.message);
+        }
+      } else {
+        toast.error(`Failed to save: ${resultAction.payload}`);
+      }
+    } catch (err) {
+      toast.error('An unexpected error occurred.');
+      console.error(err);
+    }
+ 
   };
 
   return (

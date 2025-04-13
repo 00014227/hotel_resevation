@@ -105,7 +105,7 @@ export default function RoomPopUp({ room, numberOfNights, hotelId }) {
                     </div>
 
                     {/* Reserve Button */}
-                    <button   onClick={handleReserve(room.room_name, room.price)} className='mt-6 bg-red-500 text-white py-2 px-4 rounded-xl hover:bg-red-600 transition'>
+                    <button   onClick={() => handleReserve(room.room_name, room.price)} className='mt-6 bg-red-500 text-white py-2 px-4 rounded-xl hover:bg-red-600 transition'>
                         Reserve Now
                     </button>
                 </div>
