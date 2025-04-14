@@ -3,11 +3,12 @@ import { loadStripe } from '@stripe/stripe-js';
 import { toast } from 'react-toastify';
 import { saveUserToSupabase } from '@/app/lib/features/auth/userThunks';
 import { useDispatch } from 'react-redux';
+import { useSearchParams } from 'next/navigation';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
 
-export default function ReserveForm({price = 100}) {
+export default function ReserveForm() {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     name: '',
@@ -19,6 +20,11 @@ export default function ReserveForm({price = 100}) {
     country: '',
   });
 
+  const searchParams = useSearchParams()
+  const checkInStr = searchParams.get('checkIn')
+  const checkOutStr = searchParams.get('checkOut')
+  const room_id = searchParams.get('roomId')
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -26,38 +32,38 @@ export default function ReserveForm({price = 100}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     try {
-      const resultAction = await dispatch(saveUserToSupabase(formData));
-
-      if (saveUserToSupabase.fulfilled.match(resultAction)) {
-        toast.success('Reservation saved! Redirecting to payment...');
-        // TODO: Trigger Stripe Checkout
-        const stripe = await stripePromise;
-
-        const response = await fetch('/api/create-checkout-session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...formData, price }),
-        });
-    
-        const data = await response.json();
-    
-        const result = await stripe.redirectToCheckout({
-          sessionId: data.id,
-        });
-    
-        if (result.error) {
-          console.error(result.error.message);
-        }
-      } else {
-        toast.error(`Failed to save: ${resultAction.payload}`);
-      }
-    } catch (err) {
-      toast.error('An unexpected error occurred.');
-      console.error(err);
+      toast.info('Processing your reservation...');
+  
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          room_id: room_id, // TODO: replace dynamically
+          checkIn: checkInStr, // replace with actual selected date
+          checkOut: checkOutStr,
+          amount: 20000, // amount in cents (e.g., $200.00)
+        }),
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) throw new Error(data.message || 'Something went wrong');
+  
+      toast.success('Redirecting to payment...');
+      setTimeout(() => {
+        window.location.href = data.url;
+      }, 1000);
+    } catch (error) {
+      toast.error('Failed to create checkout session. Please try again.');
+      console.error(error);
     }
- 
   };
+  
 
   return (
     <form
