@@ -35,7 +35,7 @@ export default function HotelDetail() {
         const checkOut = searchParams.get('checkOut')
         dispatch(fetchHotelById(id))
         dispatch(fetchActiveHotelRooms({ checkIn, checkOut, id }))
-    }, [searchParams]);
+    }, [searchParams, dispatch, params.id]);
 
     const hotelDetail = useSelector((state) => state.hotelDetail.hotel)
     const rooms = useSelector((state) => state.hotelDetail.rooms)

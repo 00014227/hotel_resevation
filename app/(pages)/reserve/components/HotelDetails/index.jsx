@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { fetchHotelById } from '@/app/lib/features/hotelDetails/hotelDetails.thunk';
 import { FaLocationDot } from "react-icons/fa6";
 import { TiTick } from "react-icons/ti";
+import Image from 'next/image';
 
 export default function HotelDetail() {
 
@@ -19,7 +20,7 @@ export default function HotelDetail() {
 
     dispatch(fetchHotelById(id))
     // dispatch(fetchActiveHotelRooms({ checkIn, checkOut, id }))
-  }, [searchParams]);
+  }, [searchParams, dispatch]);
 
   const checkInStr = searchParams.get('checkIn')
   const checkOutStr = searchParams.get('checkOut')
@@ -40,7 +41,9 @@ export default function HotelDetail() {
   return (
     <div className=" max-w-sm w-full bg-white rounded-2xl shadow-lg overflow-hidden mt-10">
       {images.length > 0 ? (
-        <img
+        <Image
+          width={400}
+          height={500}
           src={images[0]}
           alt={hotel?.name || 'Hotel Image'}
           className="w-full h-64 object-cover"
@@ -84,7 +87,7 @@ export default function HotelDetail() {
           <p className="font-semibold mb-1">{hotel.room}</p>
           <ul className="flex flex-wrap gap-4 text-sm text-gray-600 mt-2">
               {hotel.amenities.map((amenity) => (
-                <li className="flex items-center text-base"><TiTick /> {amenity}</li>
+                <li key={index} className="flex items-center text-base"><TiTick /> {amenity}</li>
               ))}
           </ul>
         </div>

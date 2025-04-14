@@ -3,17 +3,12 @@ import RoomPopUp from "./RoomPopUp";
 import { useParams, useSearchParams } from "next/navigation";
 
 export default function RoomResults({ rooms = [] }) {  // Default to an empty array
-  if (!rooms || rooms.length === 0) {
-    return <p className="text-gray-500 text-center">Нет доступных номеров</p>;
-  }
   const params = useParams();
+  const searchParams = useSearchParams();
 
-  const searchParams = useSearchParams()
-
-
-  const checkInStr = searchParams.get('checkIn');
-  const checkOutStr = searchParams.get('checkOut');
-  const id = params.id
+  const checkInStr = searchParams.get("checkIn");
+  const checkOutStr = searchParams.get("checkOut");
+  const id = params.id;
 
   const checkIn = checkInStr ? new Date(checkInStr) : null;
   const checkOut = checkOutStr ? new Date(checkOutStr) : null;
@@ -24,7 +19,9 @@ export default function RoomResults({ rooms = [] }) {  // Default to an empty ar
     numberOfNights = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }
 
-  console.log(numberOfNights, 'nummmmm')
+  if (!rooms || rooms.length === 0) {
+    return <p className="text-gray-500 text-center">Нет доступных номеров</p>;
+  }
 
   return (
     <div className="overflow-x-auto">

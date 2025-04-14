@@ -23,7 +23,9 @@ export default function Home() {
         <SearchForm />
         <section className="flex flex-col md:flex-row items-center gap-8 p-8 bg-gray-50">
           <div className="flex-1">
-            <img
+            <Image
+              width={300}
+              height={300}
               src="./home.png"
               alt="Hotel Room"
               className="rounded-lg shadow-md w-full object-cover"

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React from 'react'
 import { useSelector } from 'react-redux'
 
@@ -18,7 +19,10 @@ export default function HotelDetailMessage() {
       <h3 className="text-lg font-bold mb-2">{hotel.name}</h3>
       <div className="flex justify-between">
       {images.map((img, index) => (
-        <img key={index} src={img} alt={`Hotel Image ${index + 1}`} className="w-44 h-44 object-cover rounded-lg" />
+        <Image
+        width={300}
+        height={300}
+        key={index} src={img} alt={`Hotel Image ${index + 1}`} className="w-44 h-44 object-cover rounded-lg" />
       ))}
       </div>
       <p className="text-gray-700">{hotelDetail.description}</p>

@@ -1,9 +1,12 @@
+import Image from 'next/image'
 import React from 'react'
 
 export default function Card() {
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden">
-    <img
+    <Image
+  width={1200}      // Approximate full width (desktop)
+  height={288}
       src="/home.png"
       alt="Hotel Inspira"
       className="w-full h-72 object-cover"

@@ -59,7 +59,7 @@ function SignUpForm() {
             setConfirmPassword('')
 
         }
-    }, [user, active, email, isLoading, error, data])
+    }, [user, active, email, isLoading, error, data, updateUserTable])
 
     useEffect(() => {
         if (user && userTable && active) {

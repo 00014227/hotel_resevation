@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { FaStar } from "react-icons/fa";
@@ -21,7 +22,9 @@ export default function ResultCard({ hotels, checkIn, checkOut }) {
         passHref
         className="w-full lg:w-1/2"
       >
-        <img
+        <Image
+          width={1200}      // Approximate full width (desktop)
+          height={256}
           src={Array.isArray(hotel.image_url) ? hotel.image_url[0] : hotel.image_url}
           alt={hotel.name}
           className="h-64 lg:h-full w-full object-cover transition-transform duration-300 hover:scale-105"

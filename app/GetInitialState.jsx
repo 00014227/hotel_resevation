@@ -28,7 +28,7 @@ export default function GetInitialState({ children }) {
     if (!auth && !table && path.slice(1, 5) === 'play') {
       router.push('/')
     }
-  }, [user])
+  }, [user, dispatch, path, router, userTable])
 
   return <>{children}</>
 

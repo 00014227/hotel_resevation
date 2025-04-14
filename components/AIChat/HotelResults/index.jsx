@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import DescribeButton from "./components/DescribeBtn";
 import { Button } from "@/components/ui/button";
 import { toggleHotelSelection } from "@/app/lib/features/AIChat/aichat.slice";
+import Image from "next/image";
 
 export default function HotelResults() {
   const dispatch = useDispatch();
@@ -22,7 +23,9 @@ export default function HotelResults() {
               isSelected ? "bg-blue-100 border-blue-500" : "bg-white"
             }`}
           >
-            <img
+            <Image
+            width={400}
+            height={300}
               src={hotel.image_url[0]}
               alt={hotel.name}
               className="w-full h-32 object-cover rounded-lg"

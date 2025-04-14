@@ -29,7 +29,7 @@ export default function ResultPage() {
         // Dispatch Redux action or fetch hotels directly
         dispatch(searchHotels(params));
 
-    }, [searchParams])
+    }, [searchParams, dispatch])
 
     const hotels = useSelector((state) => state.hotels);
 

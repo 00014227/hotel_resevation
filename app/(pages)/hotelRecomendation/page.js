@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ChatBot from "@/components/AIChat";
+import Image from "next/image";
 
 export default function HotelChat() {
   const [messages, setMessages] = useState([]);
@@ -87,9 +88,11 @@ export default function HotelChat() {
                 className="p-2 border rounded-md my-2 cursor-pointer hover:bg-gray-100"
                 onClick={() => router.push(`/hotel/${hotel.id}`)}
               >
-                <img
+                <Image
                   src={hotel.image_url?.[0]}
                   alt={hotel.name}
+                  width={400}
+                  height={300}
                   className="w-full h-24 object-cover rounded-md mb-2"
                 />
                 <h4 className="font-bold">{hotel.name}</h4>
