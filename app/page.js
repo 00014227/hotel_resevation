@@ -26,7 +26,7 @@ export default function Home() {
             <Image
               width={300}
               height={300}
-              src="./home.png"
+              src="/home.png"
               alt="Hotel Room"
               className="rounded-lg shadow-md w-full object-cover"
             />

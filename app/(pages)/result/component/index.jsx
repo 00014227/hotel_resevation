@@ -1,5 +1,4 @@
-'use client';
-import Gutter from '@/components/Gutter';
+import React from 'react'
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,11 +7,9 @@ import ResultCard from '@/components/Card/ResultCard';
 import { useSearchParams } from 'next/navigation';
 import { searchHotels } from '@/app/lib/features/searchHotel/hotels.thunk';
 import HotelMap from '@/components/Map';
-import { Suspense } from 'react/cjs/react.production.min';
-import ResutUI from './component';
+import Gutter from '@/components/Gutter';
 
-
-export default function ResultPage() {
+export default function ResutUI() {
     const searchParams = useSearchParams()
     const dispatch = useDispatch()
 
@@ -40,10 +37,22 @@ export default function ResultPage() {
     if (!hotels || hotels.length === 0) {
         return <p>No hotels found. Please try searching again.</p>;
     }
+  return (
+    <Gutter>
+    <div className="flex gap-4">
+        <HotelMap hotels={hotels.hotels} />
 
-    return (
-      <Suspense fallback={<div>Loading...</div>}>
-        <ResutUI/>
-      </Suspense>
-    );
+        <div>
+            <h1>Available Hotels</h1>
+            <ul className="flex flex-col justify-center items-center">
+                <ResultCard
+                    hotels={hotels.hotels}
+                    checkIn={searchParams.get("checkIn")}
+                    checkOut={searchParams.get("checkOut")} />
+
+            </ul>
+        </div>
+    </div>
+</Gutter>
+  )
 }
