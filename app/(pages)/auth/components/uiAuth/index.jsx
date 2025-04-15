@@ -2,8 +2,8 @@ import React from 'react'
 import { useAuth } from "@/app/hooks/auth/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import LogInForm from "./components/LogInForm";
-import SignUpForm from "./components/SignUpForm";
+import LogInForm from '../LogInForm';
+import SignUpForm from '../SignUpForm';
 
 export default function UIAuth() {
     const searchParams = useSearchParams()

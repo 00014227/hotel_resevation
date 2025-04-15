@@ -1,45 +1,18 @@
 'use client';
 import Gutter from '@/components/Gutter';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import ResultCard from '@/components/Card/ResultCard';
 import { useSearchParams } from 'next/navigation';
 import { searchHotels } from '@/app/lib/features/searchHotel/hotels.thunk';
 import HotelMap from '@/components/Map';
-import { Suspense } from 'react/cjs/react.production.min';
 import ResutUI from './component';
 
 
 export default function ResultPage() {
-    const searchParams = useSearchParams()
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        const params = {
-            country: searchParams.get("country") || "USA",
-            city: searchParams.get("city") || "",
-            checkIn: searchParams.get("checkIn") || "",
-            checkOut: searchParams.get("checkOut") || "",
-            includePets: searchParams.get("includePets") === "true",
-            totalGuests: Number(searchParams.get("totalGuests")) || 1,
-        }
-
-        console.log("Extracted Search Params:", params);
-
-        // Dispatch Redux action or fetch hotels directly
-        dispatch(searchHotels(params));
-
-    }, [searchParams, dispatch])
-
-    const hotels = useSelector((state) => state.hotels);
-
-
-    // Handle cases where the data might not exist or is empty
-    if (!hotels || hotels.length === 0) {
-        return <p>No hotels found. Please try searching again.</p>;
-    }
+    
 
     return (
       <Suspense fallback={<div>Loading...</div>}>

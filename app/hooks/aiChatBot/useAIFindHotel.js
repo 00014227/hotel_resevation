@@ -19,7 +19,6 @@ export function useAIFindHotel() {
     // ✅ Fetch next AI-generated question
     async function fetchNextQuestion(updatedPreferences) {
         try {
-
             const response = await fetch("/api/hotel-chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -76,7 +75,7 @@ export function useAIFindHotel() {
             dispatch(fetchHotels(userPreferences));
             setMessages((prev) => [...prev, { role: "bot", text: "Here are some hotels based on your preferences!" }]);
         }
-    }, [userPreferences, dispatch]);
+    }, [userPreferences, dispatch, hotels.length, isProcessing]);
 
     // ✅ Start the AI Chat
     const useAIFindHotel2 = useCallback(async () => {
@@ -92,7 +91,7 @@ export function useAIFindHotel() {
         } catch (error) {
             console.error("Error fetching AI question:", error);
         }
-    }, []);
+    }, [dispatch]);
 
     return { messages, handleUserInput, hotels, isLoading, error, useAIFindHotel2 };
 }

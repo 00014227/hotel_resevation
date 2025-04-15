@@ -1,8 +1,8 @@
 "use client";
 
 
-import { Suspense } from "react/cjs/react.production.min";
 import UIAuth from "./components/uiAuth";
+import {Suspense} from "react";
 
 const Auth = () => {
 
