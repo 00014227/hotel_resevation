@@ -88,7 +88,7 @@ export default function HotelDetail() {
         <div className="border-t pt-4">
           <p className="font-semibold mb-1">{hotel.room}</p>
           <ul className="flex flex-wrap gap-4 text-sm text-gray-600 mt-2">
-              {hotel.amenities.map((amenity) => (
+              {hotel.amenities.map((amenity, index) => (
                 <li key={index} className="flex items-center text-base"><TiTick /> {amenity}</li>
               ))}
           </ul>
