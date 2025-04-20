@@ -13,7 +13,6 @@ import ResutUI from './component';
 
 export default function ResultPage() {
     
-
     return (
       <Suspense fallback={<div>Loading...</div>}>
         <ResutUI/>

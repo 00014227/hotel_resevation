@@ -8,7 +8,7 @@ export default function ResultCard({ hotels, checkIn, checkOut }) {
   console.log(hotels, 'ssssss')
   return (
     <>
-      {hotels?.data?.map((hotel) => (
+      {hotels?.map((hotel) => (
         <li
           key={hotel.id}
           className="border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl overflow-hidden max-w-sm w-full lg:max-w-3xl flex flex-col lg:flex-row mb-4 bg-white"

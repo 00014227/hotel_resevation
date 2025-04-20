@@ -9,6 +9,7 @@ import { searchHotels } from '@/app/lib/features/searchHotel/hotels.thunk';
 import HotelMap from '@/components/Map';
 import Gutter from '@/components/Gutter';
 import HotelFilter from '@/components/HotelFilter';
+import HotelSort from '@/components/HotelSort';
 
 export default function ResutUI() {
     const searchParams = useSearchParams()
@@ -54,7 +55,7 @@ export default function ResutUI() {
    
       };
       console.log(filteredHotels, 'fffffffffff')
-      const displayHotels = filteredHotels.length > 0 ? filteredHotels : hotels?.hotels || [];
+      const displayHotels = filteredHotels.length > 0 ? filteredHotels : hotels?.hotels?.data || [];
 
 
     const city = searchParams.get("city") || ""
@@ -73,6 +74,7 @@ export default function ResutUI() {
 
         <div className=' space-y-5'>
             <h1 className='text-2xl'>Available Hotels in: <span className='font-bold'>{city}</span></h1>
+            <HotelSort/>
             <ul className="flex flex-col justify-center items-center">
                 <ResultCard
                     hotels={ displayHotels }
