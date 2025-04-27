@@ -19,7 +19,6 @@ export default function FindHotelUI({ messages }) {
         </div>
       ))}
 
-      <HotelResults/>
     </div>
   );
 }

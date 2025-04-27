@@ -11,39 +11,40 @@ export default function HotelResults() {
 
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+    <div className="flex gap-6   overflow-y-auto">
       {hotels.map((hotel) => {
         const isSelected = selectedHotels.some((selected) => selected.id === hotel.id);
 
         return (
           <div
             key={hotel.id}
-            onClick={() => dispatch(toggleHotelSelection(hotel))} // Pass the whole hotel object
-            className={`border p-4 rounded-lg cursor-pointer transition-all ${
-              isSelected ? "bg-blue-100 border-blue-500" : "bg-white"
-            }`}
+            onClick={() => dispatch(toggleHotelSelection(hotel))}
+            className={`group border p-4 rounded-2xl cursor-pointer transition-all w-[20rem] duration-300 shadow-md hover:shadow-xl ${isSelected ? "bg-blue-100 border-blue-500" : "bg-white"
+              }`}
           >
-            <Image
-            width={400}
-            height={300}
-              src={hotel.image_url[0]}
-              alt={hotel.name}
-              className="w-full h-32 object-cover rounded-lg"
-            />
-            <h3 className="font-semibold mt-2">{hotel.name}</h3>
+            <div className="overflow-hidden rounded-xl">
+              <Image
+                width={400}
+                height={300}
+                src={hotel.image_url[0]}
+                alt={hotel.name}
+                className="w-full h-40 object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <div className="flex justify-between items-center">
+            <h3 className="font-semibold mt-4 text-lg">{hotel.name}</h3>
             <p className="text-sm text-gray-500">{hotel.location}</p>
-            <p className="font-bold">{hotel.price}</p>
-
-            {/* Show buttons only if hotel is selected */}
+            <p className="font-bold text-gray-700 mt-2">{hotel.price}</p>
+              </div>
             {isSelected && (
-              <div className="mt-2 flex gap-2">
+              <div className="mt-4 flex gap-2">
                 <DescribeButton hotel={hotel} hotelId={hotel.id} />
-                <Button variant="outline">Compare</Button>
               </div>
             )}
           </div>
         );
       })}
     </div>
+
   );
 }

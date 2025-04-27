@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useAIFindHotel } from "@/app/hooks/aiChatBot/useAIFindHotel";
 import FindHotelUI from "./Chat/FindHotelUI";
 import AIChat from "./Chat";
+import Image from "next/image";
 
 export default function ChatBot() {
     const dispatch = useDispatch();
@@ -22,9 +23,14 @@ export default function ChatBot() {
 
 
     return (
-        <Dialog>
+        <Dialog className="">
             <DialogTrigger asChild>
-                <Button variant="outline">Open AI Assistant</Button>
+                <Button variant="outline">
+                    <Image
+                    width={100}
+                    height={100}
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSj2-WRYl_s-5y5aqppzrAMs-qfvFVABTwyGQ&s"/>
+                </Button>
             </DialogTrigger>
             <DialogContent className="max-w-[70vw] p-5 rounded-2xl">
                 <div className="flex flex-col space-y-4">
@@ -53,7 +59,10 @@ export default function ChatBot() {
                     <AITabs action={useAIFindHotel2}/>
 
                     {/* Hotel Results we can also create separeate folder to it */}
+                    <div className="overflow-y-auto">
                     <HotelResults/>
+
+                    </div>
                 </div>
             </DialogContent>
         </Dialog>

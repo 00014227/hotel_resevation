@@ -53,11 +53,7 @@ export default function AITabs( {action} ) {
                     <Calendar size={18} /> Nearby Attractions
                 </TabsTrigger>
             </TabsList>
-            {features.map((feature) => (
-                <TabsContent key={feature.label} value={feature.label}>
-                    <p className="text-gray-600">{`You selected: ${feature.label}`}</p>
-                </TabsContent>
-            ))}
+        
         </Tabs>
     )
 }

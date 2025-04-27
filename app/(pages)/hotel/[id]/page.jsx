@@ -12,6 +12,7 @@ import HotelMap from "@/components/Map";
 import RoomResults from "@/components/RoomResults";
 import RoomSearch from "@/components/RoomResults/RoomSearch";
 import MesssageToTheHotel from "./components/MessageToHotel";
+import HotelAmenities from "./components/HotelAmenitites";
 
 const defaultAmenities = [
     { icon: <FaWifi />, label: "Free Wi-Fi" },
@@ -87,6 +88,7 @@ export default function HotelDetail() {
                         </ul>
                     </div> */}
                 </div>
+                <HotelAmenities amenities={hotelDetail.data[0].amenities}/>
                 <RoomSearch/>
                 <RoomResults rooms={rooms}/>
                 <MesssageToTheHotel admin_id={hotelDetail.data[0].admin_id}/>

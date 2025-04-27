@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import Gutter from "../Gutter";
 import NavbarUserDesktop from "./UserDesktop";
+import HotelResponsePopup from "./NotificationMessages";
 
 export default function Navbar() {
     const { user } = useSelector((state) => state.auth)
@@ -17,8 +18,10 @@ export default function Navbar() {
                         </button>
 
                         {user?.user.email ? (
+                            <div className="flex justify-between items-center">
                             <NavbarUserDesktop userAuth={user} />
-
+                            <HotelResponsePopup/>
+                            </div>
                         ) : (
                             <>
                                 <Link href={'/auth?tab=login'} className="bg-red-500 text-white px-8 py-2 rounded-3xl hover:bg-red-800">

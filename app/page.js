@@ -1,4 +1,5 @@
 "use client"
+import ChatBot from "@/components/AIChat";
 import Card from "@/components/Card";
 import Gutter from "@/components/Gutter";
 import Hero from "@/components/Hero";
@@ -21,6 +22,10 @@ export default function Home() {
       <Hero />
       <Gutter>
         <SearchForm />
+        <div className="fixed bottom-6 right-6 z-50">
+        <ChatBot/>
+
+        </div>
         <section className="flex flex-col md:flex-row items-center gap-8 p-8 bg-gray-50">
           <div className="flex-1">
             <Image
