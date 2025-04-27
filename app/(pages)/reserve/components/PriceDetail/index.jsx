@@ -1,8 +1,14 @@
 "use client"
 
 import React from 'react';
+import { useSearchParams } from 'next/navigation';
 
-export default function PriceDetail({ pricePerNight = 200, nights = 1 }) {
+export default function PriceDetail() {
+  const searchParams = useSearchParams();
+
+  const pricePerNight = parseFloat(searchParams.get('room_price')) || 200;
+  const nights = parseInt(searchParams.get('numberOfNights')) || 1;
+
   const taxRate = 0.1; // 10% tax
   const subtotal = pricePerNight * nights;
   const tax = subtotal * taxRate;

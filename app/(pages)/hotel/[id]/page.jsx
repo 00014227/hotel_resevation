@@ -11,6 +11,7 @@ import { FaWifi, FaSwimmingPool, FaUtensils, FaDumbbell, FaParking, FaConciergeB
 import HotelMap from "@/components/Map";
 import RoomResults from "@/components/RoomResults";
 import RoomSearch from "@/components/RoomResults/RoomSearch";
+import MesssageToTheHotel from "./components/MessageToHotel";
 
 const defaultAmenities = [
     { icon: <FaWifi />, label: "Free Wi-Fi" },
@@ -38,6 +39,7 @@ export default function HotelDetail() {
     }, [searchParams, dispatch, params.id]);
 
     const hotelDetail = useSelector((state) => state.hotelDetail.hotel)
+    console.log(hotelDetail, 'deeeet')
     const rooms = useSelector((state) => state.hotelDetail.rooms)
     if (!hotelDetail) {
         return <p>Loading...</p>;
@@ -87,6 +89,7 @@ export default function HotelDetail() {
                 </div>
                 <RoomSearch/>
                 <RoomResults rooms={rooms}/>
+                <MesssageToTheHotel admin_id={hotelDetail.data[0].admin_id}/>
             </div>
         </Gutter>
     );

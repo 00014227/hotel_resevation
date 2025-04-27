@@ -27,6 +27,14 @@ export default function ReserveForm() {
   const checkOutStr = searchParams.get('checkOut')
   const room_id = searchParams.get('roomId')
 
+  const pricePerNight = parseFloat(searchParams.get('room_price')) || 200;
+  const nights = parseInt(searchParams.get('numberOfNights')) || 1;
+
+  const taxRate = 0.1; // 10% tax
+  const subtotal = pricePerNight * nights;
+  const tax = subtotal * taxRate;
+  const total = subtotal + tax;
+  const cents = total * 100
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -48,7 +56,7 @@ export default function ReserveForm() {
           room_id: room_id, // TODO: replace dynamically
           checkIn: checkInStr, // replace with actual selected date
           checkOut: checkOutStr,
-          amount: 20000, // amount in cents (e.g., $200.00)
+          amount: cents, // amount in cents (e.g., $200.00)
         }),
       });
   

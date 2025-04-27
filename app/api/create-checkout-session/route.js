@@ -87,7 +87,7 @@ export async function POST(req) {
             },
           },
         ],
-        success_url: `${process.env.NEXT_PUBLIC_URL}/success?bookingId=${booking.id}`,
+        success_url: `${process.env.NEXT_PUBLIC_URL}/success?bookingId=${booking.id}&amount=${amount}`,
         cancel_url: `${process.env.NEXT_PUBLIC_URL}/cancel`,
         metadata: {
           booking_id: booking.id,
